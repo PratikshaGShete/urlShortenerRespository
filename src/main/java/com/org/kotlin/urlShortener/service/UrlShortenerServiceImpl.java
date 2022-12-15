@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.org.kotlin.urlShortener.dao.UrlDaoImpl;
 import com.org.kotlin.urlShortener.exception.InvalidParameterException;
@@ -13,7 +14,7 @@ import com.org.kotlin.urlShortener.model.LongUrl;
 import com.org.kotlin.urlShortener.model.Url;
 import com.org.kotlin.urlShortener.util.UrlCommonFetchUtil;
 
-@Component
+@Service
 public class UrlShortenerServiceImpl implements UrlShortenerService {
    
 	@Autowired
