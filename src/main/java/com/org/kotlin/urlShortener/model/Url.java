@@ -9,20 +9,20 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="url",uniqueConstraints = @UniqueConstraint(columnNames = {"long_url", "short_url"}))
+@Table(name = "url", uniqueConstraints = @UniqueConstraint(columnNames = { "long_url", "short_url" }))
 public class Url {
 
 	@Id
-	@Column(name="long_url",length = 1000)
+	@Column(name = "long_url", length = 1000)
 	private String longUrl;
-	
-	@Column(name="short_url")
+
+	@Column(name = "short_url")
 	private String shortUrl;
-	
+
 	private LocalDateTime creationDateTime;
-	
+
 	private LocalDateTime expireDateTime;
-	
+
 	public String getLongUrl() {
 		return longUrl;
 	}
@@ -54,5 +54,5 @@ public class Url {
 	public void setExpireDateTime(LocalDateTime expireDateTime) {
 		this.expireDateTime = expireDateTime;
 	}
-		
+
 }

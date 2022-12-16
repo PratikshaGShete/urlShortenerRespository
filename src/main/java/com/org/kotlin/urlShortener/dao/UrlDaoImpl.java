@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.org.kotlin.urlShortener.controller.UrlApiController;
 import com.org.kotlin.urlShortener.model.Url;
 
 @Transactional
@@ -69,7 +68,6 @@ public class UrlDaoImpl  {
 	
 	public Url fetchUrlDetails(String columnName,String lUrl)
 	{
-		System.out.println(columnName+" "+lUrl);
 		Session session = getSession();
 		Criteria criteria = session.createCriteria(Url.class);
 		if ( criteria == null )

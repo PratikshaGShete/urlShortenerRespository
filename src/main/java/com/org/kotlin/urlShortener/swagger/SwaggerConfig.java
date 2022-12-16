@@ -19,30 +19,22 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
-    @Bean
-    public Docket api(){
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis( RequestHandlerSelectors.basePackage("com.org.kotlin.urlShortener") )
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(getApiInfo());
-    }
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.org.kotlin.urlShortener")).paths(PathSelectors.any())
+				.build().apiInfo(getApiInfo());
+	}
 
-    private ApiInfo getApiInfo() {
-        return new ApiInfoBuilder()
-                .title("Url Shortener APIs")
-                .version("1.0.0")
-                .build();
-    }
+	private ApiInfo getApiInfo() {
+		return new ApiInfoBuilder().title("Url Shortener APIs").version("1.0.0").build();
+	}
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
 
 }

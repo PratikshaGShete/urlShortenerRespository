@@ -10,27 +10,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.google.common.cache.Cache;
 import com.org.kotlin.urlShortener.dao.UrlDaoImpl;
 import com.org.kotlin.urlShortener.model.Url;
 import com.org.kotlin.urlShortener.util.UrlCommonFetchUtil;
 
 @Component
 public class ScheduleConfiguration {
-	
+
 	@Autowired
 	private UrlDaoImpl lUrlDaoImpl;
-	
+
 	@Autowired
 	private UrlCommonFetchUtil lUrlCommonFetchUtil;
-		
+
 	@Scheduled(cron = "0 30 4 15 * ?")
 	public void doScheduledWork() {
 
 		List<Url> lUrlList = lUrlDaoImpl.fetchAllUrl();
 		Set<String> lUrlSet = new HashSet<>();
 		for (Url url : lUrlList) {
-			HashMap<String, HashMap<String, Object>> lUrlMap = lUrlCommonFetchUtil.lUrlMap;
-			lUrlMap.clear();
+			Cache<String, HashMap<String, Object>> lUrlMap = lUrlCommonFetchUtil.urlCache;
+			lUrlMap.cleanUp();
+			Cache<String, String> lShortUrlMap = lUrlCommonFetchUtil.shortUrlCache;
+			lShortUrlMap.cleanUp();
 			if (!lUrlCommonFetchUtil.validateUrl(url.getLongUrl())) {
 				lUrlSet.add(url.getLongUrl());
 			} else if (!lUrlCommonFetchUtil.validateExpireDate(url.getExpireDateTime())) {
@@ -39,15 +42,16 @@ public class ScheduleConfiguration {
 				lUrl.setCreationDateTime(LocalDateTime.now());
 				lUrl.setExpireDateTime(LocalDateTime.now().plusMonths(6));
 				lUrl.setShortUrl(lUrlCommonFetchUtil.randomString());
-				lUrlDaoImpl.saveUrl(lUrl, 0);				
+				lUrlDaoImpl.saveUrl(lUrl, 0);
 				lUrlMap.put(url.getLongUrl(), populateHashMapForUrl(url));
+				lShortUrlMap.put(url.getShortUrl(), url.getLongUrl());
 
 			} else {
 				lUrlMap.put(url.getLongUrl(), populateHashMapForUrl(url));
+				lShortUrlMap.put(url.getShortUrl(), url.getLongUrl());
 			}
-		}		
-		if(!lUrlSet.isEmpty())
-		{
+		}
+		if (!lUrlSet.isEmpty()) {
 			lUrlDaoImpl.deleteUrlFromDb(lUrlSet);
 		}
 

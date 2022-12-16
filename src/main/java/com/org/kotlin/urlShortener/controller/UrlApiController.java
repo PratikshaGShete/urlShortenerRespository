@@ -22,9 +22,9 @@ import com.org.kotlin.urlShortener.service.UrlShortenerServiceImpl;
 import com.org.kotlin.urlShortener.util.UrlCommonFetchUtil;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.annotations.ApiResponse;
 
 
 @RestController
@@ -44,7 +44,7 @@ public class UrlApiController  {
 	public ResponseEntity<String> createUrlShortForLongUrl(@Parameter(description = "long Url to generate the short Url") @Valid @RequestBody LongUrl longUrl)
 	{
     	logger.info("Method : POST /api/url-shortener/url="+longUrl.getFull_url() +"/");
-		String shortUrl = lUrlShortenerServiceImpl.createShortUrl(longUrl);
+    	String shortUrl = lUrlShortenerServiceImpl.createShortUrl(longUrl);
 		if (shortUrl != null) {
 			return new ResponseEntity<String>(UrlCommonFetchUtil.localAddress+""+shortUrl, HttpStatus.CREATED);
 		}
@@ -61,18 +61,6 @@ public class UrlApiController  {
 			throw new InvalidParameterException("Invalid Url");
 		}
 	}
-	
-	/*
-	 * @ApiOperation(value = "API to get a shortener URL.")
-	 * 
-	 * @RequestMapping(value="/api/short/{shortUrl}", method=RequestMethod.GET)
-	 * public ResponseEntity<String> fetchShortUrl(@PathVariable("longUrl") String
-	 * longUrl) throws IOException {
-	 * logger.info("Method : GET /api/shorturl/"+longUrl+"/"); String shortUrl =
-	 * lUrlShortenerServiceImpl.fetchShortUrl(longUrl); if (shortUrl != null) {
-	 * return new ResponseEntity<String>(shortUrl, HttpStatus.OK); } return new
-	 * ResponseEntity<String>(HttpStatus.NOT_FOUND); }
-	 */
 	
 	@ApiOperation(value = "API to get a Full URL.")
 	@RequestMapping(value="/api/longurl/{shortUrl}", method=RequestMethod.GET)
